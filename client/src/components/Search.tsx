@@ -1,9 +1,4 @@
-import {
-  useState,
-  ChangeEvent,
-  KeyboardEvent,
-  HtmlHTMLAttributes,
-} from 'react';
+import { useState, ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,13 +15,7 @@ const Search = () => {
     }
   };
 
-  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      console.log('enterrrr');
-    }
-  };
   const searchLocation = async () => {
-    const location = '';
     const response = await axios.post(`${BASE_URL}/weather`, {
       location,
     });
@@ -42,6 +31,17 @@ const Search = () => {
     //   setLocation('')
   };
 
+  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      console.log('enterrrr');
+      searchLocation();
+    }
+  };
+
+  const onButtonClick = () => {
+    searchLocation();
+  };
+
   console.log({ location });
 
   return (
@@ -51,7 +51,7 @@ const Search = () => {
         onChange={(event) => onInputChange(event)}
         onKeyDown={(event) => onKeyDown(event)}
       />
-      <Button>Search</Button>
+      <Button onClick={onButtonClick}>Search</Button>
     </div>
   );
 };
