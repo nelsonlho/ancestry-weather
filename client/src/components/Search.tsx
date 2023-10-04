@@ -19,7 +19,13 @@ const Search = () => {
       setLocation(nextLocation);
     }
   };
-  const searchLocation = async (event: KeyboardEvent<HTMLImageElement>) => {
+
+  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      console.log('enterrrr');
+    }
+  };
+  const searchLocation = async () => {
     const location = '';
     const response = await axios.post(`${BASE_URL}/weather`, {
       location,
@@ -43,6 +49,7 @@ const Search = () => {
       <Input
         className="w-5/12 mx-2"
         onChange={(event) => onInputChange(event)}
+        onKeyDown={(event) => onKeyDown(event)}
       />
       <Button>Search</Button>
     </div>
