@@ -1,13 +1,26 @@
-// import { KeyboardEvent } from 'react';
+import {
+  useState,
+  ChangeEvent,
+  KeyboardEvent,
+  HtmlHTMLAttributes,
+} from 'react';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL as string;
 const Search = () => {
-  const searchLocation = async () => {
-    // event: KeyboardEvent<HTMLImageElement>
-    const location = 'San Francisco';
+  const [location, setLocation] = useState<string | null>(null);
+
+  const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const nextLocation = event.target.value;
+    if (nextLocation != null || (nextLocation as string).trim() !== '') {
+      setLocation(nextLocation);
+    }
+  };
+  const searchLocation = async (event: KeyboardEvent<HTMLImageElement>) => {
+    const location = '';
     const response = await axios.post(`${BASE_URL}/weather`, {
       location,
     });
@@ -22,10 +35,15 @@ const Search = () => {
     //   });
     //   setLocation('')
   };
-  searchLocation();
+
+  console.log({ location });
+
   return (
     <div className="flex justify-center my-4">
-      <Input className="w-5/12 mx-2" />
+      <Input
+        className="w-5/12 mx-2"
+        onChange={(event) => onInputChange(event)}
+      />
       <Button>Search</Button>
     </div>
   );
