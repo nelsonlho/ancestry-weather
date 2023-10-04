@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getImageUrl(icon: string) {
-  return `https://openweathermap.org/img/wn/${icon}@4x.png`;
+  return `https://openweathermap.org/img/wn/${icon}@2x.png`;
 }
 
 export function massageWeatherData(data: WeatherData): WeatherInfo {
@@ -17,9 +17,9 @@ export function massageWeatherData(data: WeatherData): WeatherInfo {
   const iconUrl = weather[0]?.icon ? getImageUrl(weather[0]?.icon) : undefined;
   return {
     location,
-    humidity,
-    feelsLike,
-    temperature,
+    humidity: Math.round(humidity),
+    feelsLike: Math.round(feelsLike),
+    temperature: Math.round(temperature),
     description,
     iconUrl,
   };

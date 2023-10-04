@@ -7,9 +7,10 @@ import { useToast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { massageWeatherData } from '@/lib/utils';
 import { WeatherInfo } from '@/lib/types';
+import Weather from './Weather';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL as string;
-const Search = () => {
+const Main = () => {
   const { toast } = useToast();
 
   const [info, setInfo] = useState<WeatherInfo | null>(null);
@@ -33,13 +34,6 @@ const Search = () => {
     },
   });
 
-  useEffect(() => {
-    const { lat, lng } = coords;
-    if (lat != null && lng != null) {
-      searchLocation();
-    }
-  }, [coords]);
-
   const searchLocation = async () => {
     const { lat, lng } = coords;
 
@@ -53,8 +47,8 @@ const Search = () => {
       if (data == null) {
         throw Error();
       }
-      const newData = massageWeatherData(data);
-      console.log({ newData });
+      const newInfo = massageWeatherData(data);
+      setInfo(newInfo);
     } catch {
       toast({
         variant: 'destructive',
@@ -67,17 +61,25 @@ const Search = () => {
     }
   };
 
+  useEffect(() => {
+    const { lat, lng } = coords;
+    if (lat != null && lng != null) {
+      searchLocation();
+    }
+  }, [coords, searchLocation]);
+
   return (
-    <div className="flex justify-center my-4">
+    <div className="flex my-2 flex-col items-center">
       <Input
-        className="w-5/12 mx-2"
+        className="md:w-4/12 my-12"
         ref={ref as React.RefObject<HTMLInputElement>}
         placeholder="Enter location to get weather info"
       />
       <Toaster />
-      {loading ? <div>isLoading</div> : null}
+      {loading && <div>isLoading</div>}
+      {!loading && info != null && <Weather {...info} />}
     </div>
   );
 };
 
-export default Search;
+export default Main;
