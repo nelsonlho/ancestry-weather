@@ -66,7 +66,7 @@ const Main = () => {
     if (lat != null && lng != null) {
       searchLocation();
     }
-  }, [coords, searchLocation]);
+  }, [coords]);
 
   return (
     <div className="flex my-2 flex-col items-center">
