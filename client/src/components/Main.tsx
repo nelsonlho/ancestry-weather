@@ -5,11 +5,14 @@ import { Toaster } from '@/components/ui/toaster';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
+import { massageWeatherData } from '@/lib/utils';
+import { WeatherInfo } from '@/lib/types';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL as string;
 const Search = () => {
   const { toast } = useToast();
 
+  const [info, setInfo] = useState<WeatherInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [coords, setCoords] = useState<{
     lat: number | null;
@@ -46,8 +49,12 @@ const Search = () => {
         lat,
         lng,
       });
-      const data = await response;
-      console.log({ loading, data });
+      const { data } = await response;
+      if (data == null) {
+        throw Error();
+      }
+      const newData = massageWeatherData(data);
+      console.log({ newData });
     } catch {
       toast({
         variant: 'destructive',
@@ -65,6 +72,7 @@ const Search = () => {
       <Input
         className="w-5/12 mx-2"
         ref={ref as React.RefObject<HTMLInputElement>}
+        placeholder="Enter location to get weather info"
       />
       <Toaster />
       {loading ? <div>isLoading</div> : null}
