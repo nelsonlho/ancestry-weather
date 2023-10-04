@@ -11,15 +11,15 @@ app.use(express.json());
 
 app.post('/weather', async (req: Request, res: Response) => {
   const { body } = req;
-  const location = body.location;
-  if (location == null || location.trim() === '') {
+  const { lat, lng: lon } = body;
+  if (lat == null || lon == null) {
     return res
       .status(400)
       .json({ error: 'Invalid location. Please try again' });
   }
   try {
     const apiKey = process.env.WEATHER_API_KEY as string;
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=${apiKey}`;
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`;
     const response = await axios.get(apiUrl);
     const weatherData = response.data;
 
