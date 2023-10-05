@@ -76,7 +76,7 @@ const Main = () => {
         placeholder="Enter location to get weather info"
       />
       <Toaster />
-      {loading && <div>isLoading</div>}
+      {loading && <div>Loading...</div>}
       {!loading && info != null && <Weather {...info} />}
     </div>
   );
