@@ -6,7 +6,23 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(cors());
+// May need to adjust. Just an example to show that CORS may be a security risk
+const whitelist = ['http://localhost:5173'];
+
+const corsOptions = {
+  origin: (
+    origin: string | undefined,
+    callback: (err: Error | null, allow?: boolean) => void
+  ) => {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.post('/weather', async (req: Request, res: Response) => {
